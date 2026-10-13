@@ -15,14 +15,14 @@ and hand-written examples.
 
 You need a Mac with Apple Silicon (M1/M2/M3/M4) and Python 3.10+.
 
-### Step 1 — Clone the repo
+### Step 1: Clone the repo
 
 ```bash
 git clone https://github.com/ssvvikas/tech-support-llm.git
 cd tech-support-llm
 ```
 
-### Step 2 — Set up Python environment
+### Step 2: Set up Python environment
 
 ```bash
 python3 -m venv venv
@@ -30,7 +30,7 @@ source venv/bin/activate
 pip install mlx-lm
 ```
 
-### Step 3 — Train the model (takes 5–15 minutes)
+### Step 3: Train the model (takes 5–15 minutes)
 
 The training data is included in `data/`. Run the fine-tuning:
 
@@ -42,7 +42,7 @@ mlx_lm.lora --model mlx-community/Llama-3.2-3B-Instruct-4bit \
 This downloads the base model (~2 GB) the first time and saves LoRA adapters
 to the `adapters/` folder.
 
-### Step 4 — Ask it a question
+### Step 4: Ask it a question
 
 ```bash
 mlx_lm.generate --model mlx-community/Llama-3.2-3B-Instruct-4bit \
