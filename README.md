@@ -1,12 +1,12 @@
 # Tech Support LLM
 
-A fine-tuned language model for IT troubleshooting, built with Apple MLX on a Mac.
+A fine tuned language model for IT troubleshooting, built with Apple MLX on a Mac.
 
 ## What is this?
 
-A small open-source LLM trained on real tech support Q&A data. It learns a
-clear, step-by-step troubleshooting style from public Stack Exchange answers
-and hand-written examples.
+A small open source LLM trained on real tech support Q&A data. It learns a
+clear, step by step troubleshooting style from public Stack Exchange answers
+and handwritten examples.
 
 **Base model:** `mlx-community/Llama-3.2-3B-Instruct-4bit`
 **Fine-tuning:** LoRA via `mlx-lm` on Apple Silicon
