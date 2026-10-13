@@ -1,0 +1,23 @@
+# Model files (too large for GitHub — push to Hugging Face Hub)
+adapters/
+tech-support-model/
+*.bin
+*.safetensors
+*.gguf
+
+# Raw data dumps (large XML/7z files)
+raw_data/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
