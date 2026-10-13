@@ -863,7 +863,7 @@ EXAMPLES = [
 
     # ── Monitoring ──
     (
-        "How do I check CPU and memory usage on a Windows server? It's running slow.",
+        "How do I check CPU and memory usage on a Windows server? It's running slow?",
         "Multiple tools can show you what's using resources:\n\n"
         "**Quick check — Task Manager:**\n"
         "Press Ctrl+Shift+Esc. Click 'More details' if needed. "
@@ -883,6 +883,1236 @@ EXAMPLES = [
         "Open `perfmon` from Start. Add counters for Processor > % Processor Time and Memory > Available MBytes. "
         "Let it run for a few minutes to see trends. You can set up a Data Collector Set to log performance over 24 hours "
         "and find out if the problem happens at specific times (like during backup jobs at night)."
+    ),
+
+    # ── Windows Firewall ──
+    (
+        "How do I allow a program through Windows Firewall? I installed software but it can't connect to the internet.",
+        "Windows Firewall might be blocking outbound or inbound connections for that program.\n\n"
+        "1. Open Windows Defender Firewall: Search for 'Windows Defender Firewall' in Start > click 'Allow an app or feature through Windows Defender Firewall'.\n\n"
+        "2. Click 'Change settings' (you need admin rights). Then click 'Allow another app' at the bottom.\n\n"
+        "3. Click 'Browse' and navigate to the program's .exe file. Select it and click Add.\n\n"
+        "4. Check both 'Private' and 'Public' boxes if you need it to work on all networks. Click OK.\n\n"
+        "If that doesn't work, create a manual rule:\n"
+        "- Open 'Windows Defender Firewall with Advanced Security' (search for it).\n"
+        "- Click 'Outbound Rules' > 'New Rule' > Program > browse to the .exe > Allow the connection > apply to all profiles > give it a name.\n\n"
+        "To test: Run `Test-NetConnection -ComputerName google.com -Port 443` in PowerShell. If it returns TcpTestSucceeded: True, your connection works."
+    ),
+
+    # ── Dual Monitor ──
+    (
+        "My second monitor is not being detected. I plugged it in but nothing shows up.",
+        "This is a common issue with a few possible causes.\n\n"
+        "1. Check the cable and port: Make sure the cable is fully plugged in on both ends. Try a different cable if you have one. "
+        "If you're using an adapter (like USB-C to HDMI), try connecting directly without the adapter to test.\n\n"
+        "2. Force Windows to detect it: Right-click the desktop > Display settings > scroll down > click 'Detect'. "
+        "Sometimes Windows doesn't auto-detect the second monitor.\n\n"
+        "3. Update your graphics driver: Open Device Manager > Display adapters > right-click your graphics card > Update driver > Search automatically. "
+        "Or download the latest driver from the manufacturer's website (NVIDIA, AMD, or Intel).\n\n"
+        "4. Check the input source on the monitor: Use the monitor's physical buttons to make sure it's set to the correct input (HDMI, DisplayPort, VGA, etc.).\n\n"
+        "5. Try Windows + P: Press Windows key + P and select 'Extend'. Sometimes the display mode is set to 'PC screen only'.\n\n"
+        "6. Check resolution settings: Some monitors won't display if the resolution is set too high or too low. "
+        "In Display settings, try setting the second monitor to its recommended resolution."
+    ),
+
+    # ── Disk Cleanup ──
+    (
+        "My C: drive is almost full but I don't know what's taking up space. How do I free up storage?",
+        "Here's how to find and clean up what's eating your disk space:\n\n"
+        "1. Run Disk Cleanup: Search for 'Disk Cleanup' > select C: > let it scan > check all boxes (especially 'Previous Windows installations' and 'Windows Update Cleanup') > click 'Clean up system files' for more options. This alone can free 5-20 GB.\n\n"
+        "2. Check what's using space: Open Settings > System > Storage. This shows a breakdown of what's using space. "
+        "Click on each category to see details.\n\n"
+        "3. Clear temp files: Open Run (Win+R) > type `%temp%` > Select all > Delete. Skip any files in use. "
+        "Also clear `C:\\Windows\\Temp` the same way.\n\n"
+        "4. Uninstall unused programs: Settings > Apps > Apps & features. Sort by size and uninstall anything you don't use.\n\n"
+        "5. Move large files: Check your Downloads folder — it often has old installers and files. Move what you need to an external drive.\n\n"
+        "6. Disable hibernation if you don't use it: Open Command Prompt as admin and run `powercfg -h off`. "
+        "This deletes the hiberfil.sys file which can be 4-8 GB.\n\n"
+        "7. For a detailed view, download WinDirStat (free). It shows a visual map of exactly what's using space on your drive."
+    ),
+
+    # ── Networking — IP Address ──
+    (
+        "How do I find my IP address on Windows?",
+        "There are two types of IP addresses — your local (private) IP and your public IP.\n\n"
+        "**Local IP (your address on the network):**\n"
+        "Open Command Prompt and type:\n"
+        "```\nipconfig\n```\n"
+        "Look for 'IPv4 Address' under your active adapter (Wi-Fi or Ethernet). It usually starts with 192.168.x.x or 10.x.x.x.\n\n"
+        "**Public IP (your address on the internet):**\n"
+        "Open a browser and go to whatismyip.com. Or in PowerShell:\n"
+        "```\n(Invoke-WebRequest -Uri 'https://api.ipify.org').Content\n```\n\n"
+        "**On Mac:**\n"
+        "System Settings > Network > click your connection (Wi-Fi or Ethernet) > Details. "
+        "Or in Terminal: `ifconfig | grep 'inet '`\n\n"
+        "**On Linux:**\n"
+        "```\nip addr show\n```\n"
+        "Or the shorter version: `hostname -I`\n\n"
+        "Your local IP can change if your router uses DHCP. If you need a permanent local IP, set a static IP or create a DHCP reservation on your router."
+    ),
+
+    # ── Slow Boot ──
+    (
+        "My Windows PC takes 5 minutes to boot up. It used to be fast. What happened?",
+        "Slow boot is usually caused by too many startup programs, a failing drive, or Windows updates pending.\n\n"
+        "1. Check startup programs: Open Task Manager (Ctrl+Shift+Esc) > Startup tab. Disable anything you don't need at startup. "
+        "Focus on programs with 'High' startup impact. Don't disable antivirus or system drivers.\n\n"
+        "2. Check your drive health: If you have an HDD, it might be dying. Open Command Prompt as admin:\n"
+        "```\nwmic diskdrive get status\n```\n"
+        "If it shows anything other than 'OK', back up your data immediately. Consider upgrading to an SSD — "
+        "this is the single biggest speed improvement you can make.\n\n"
+        "3. Check for pending updates: Settings > Windows Update. Install any pending updates and restart.\n\n"
+        "4. Run a disk check:\n"
+        "```\nchkdsk C: /f /r\n```\n"
+        "It will ask to schedule on next restart. Say yes and restart.\n\n"
+        "5. Check for malware: Run a full scan with Windows Defender or Malwarebytes.\n\n"
+        "6. Enable Fast Startup: Control Panel > Power Options > 'Choose what the power buttons do' > "
+        "'Change settings that are currently unavailable' > check 'Turn on fast startup'.\n\n"
+        "7. Measure boot time: Open Event Viewer > Applications and Services Logs > Microsoft > Windows > Diagnostics-Performance > Operational. "
+        "Look for Event ID 100 — it shows exact boot time in milliseconds."
+    ),
+
+    # ── Zoom Audio ──
+    (
+        "People on my Zoom call can't hear me but I can hear them. My microphone isn't working.",
+        "This is usually a permission or device selection issue.\n\n"
+        "1. Check Zoom's audio settings: In the Zoom call, click the arrow next to the microphone icon at the bottom. "
+        "Make sure the correct microphone is selected. Try 'Test Speaker & Microphone' from the menu.\n\n"
+        "2. Check if you're muted: Look at the microphone icon — if it has a red line through it, click it to unmute.\n\n"
+        "3. Check Windows microphone permissions: Settings > Privacy & Security > Microphone. "
+        "Make sure 'Microphone access' is On and Zoom is in the list of allowed apps.\n\n"
+        "4. Check your sound settings: Right-click the speaker icon in the taskbar > Sound settings > Input. "
+        "Make sure the correct microphone is set as default. Speak into it and watch the volume bar — if it doesn't move, Windows isn't receiving audio.\n\n"
+        "5. Check physical connections: If using a USB headset, try a different USB port. If using Bluetooth, disconnect and reconnect. "
+        "If using a 3.5mm jack, make sure it's in the microphone port (usually pink), not the speaker port.\n\n"
+        "6. Update audio drivers: Device Manager > Audio inputs and outputs > right-click your microphone > Update driver.\n\n"
+        "7. Quick fix: Leave and rejoin the Zoom call. Sometimes Zoom grabs the wrong audio device on join."
+    ),
+
+    # ── Mac — Time Machine ──
+    (
+        "How do I set up Time Machine backup on my Mac?",
+        "Time Machine is the built-in backup tool on Mac. Here's how to set it up:\n\n"
+        "1. Connect an external drive: Plug in a USB or Thunderbolt external hard drive. "
+        "Time Machine needs a dedicated drive — it will use the entire disk for backups.\n\n"
+        "2. Open Time Machine: System Settings > General > Time Machine (on older macOS: System Preferences > Time Machine).\n\n"
+        "3. Click 'Add Backup Disk' and select your external drive. Click 'Set Up Disk'.\n\n"
+        "4. Choose encryption: It will ask if you want to encrypt backups. Select 'Encrypt Backup' and set a password. "
+        "This protects your data if the drive is stolen. Write down the password somewhere safe.\n\n"
+        "5. The first backup takes a long time (hours if you have a lot of data). After that, it backs up only what changed, so it's fast.\n\n"
+        "Time Machine runs automatically every hour when the drive is connected. To restore files, click the Time Machine icon in the menu bar > 'Browse Time Machine Backups'. "
+        "You can go back in time and restore individual files or folders.\n\n"
+        "Tips:\n"
+        "- Use a drive at least 2x the size of your internal storage.\n"
+        "- To exclude folders (like large video files), go to Time Machine settings > Options > add folders to exclude.\n"
+        "- You can use Time Machine to migrate everything to a new Mac using Migration Assistant."
+    ),
+
+    # ── Outlook — Calendar ──
+    (
+        "Outlook calendar is not syncing with my phone. I added events on my computer but they don't show up on my phone.",
+        "Calendar sync issues depend on what type of email account you're using.\n\n"
+        "**Microsoft 365 / Exchange account:**\n"
+        "1. On your phone, remove and re-add the account: Settings > Accounts > delete the email account > add it back.\n"
+        "2. Make sure you're using the Outlook app on your phone (not the default mail app). The Outlook app syncs calendars better with Microsoft accounts.\n"
+        "3. Check that calendar sync is enabled: In the Outlook app > tap your profile icon > tap the gear > tap your account > make sure 'Sync Calendars' is on.\n\n"
+        "**Gmail account in Outlook:**\n"
+        "Outlook desktop and Google Calendar don't sync directly. Events you add in Outlook won't appear in Google Calendar automatically. "
+        "Options: Use the Google Calendar web app, or subscribe to your Outlook calendar in Google Calendar using an ICS link.\n\n"
+        "**General troubleshooting:**\n"
+        "1. Force a sync: In Outlook desktop, go to Send/Receive tab > click 'Update Folder'.\n"
+        "2. Check which calendar you're adding events to: You might have multiple calendars. Make sure you're adding events to the synced one, not a local calendar.\n"
+        "3. Restart Outlook: Close it completely and reopen. Sometimes the sync gets stuck."
+    ),
+
+    # ── Wi-Fi Troubleshooting — Advanced ──
+    (
+        "My laptop keeps connecting to a weak Wi-Fi signal instead of the stronger one. How do I fix this?",
+        "Windows remembers Wi-Fi networks and has a priority list. It might prefer an old network over the better one.\n\n"
+        "1. Set network priority: Open Command Prompt as admin and list your saved networks:\n"
+        "```\nnetsh wlan show profiles\n```\n"
+        "Then set the preferred network to have higher priority:\n"
+        "```\nnetsh wlan set profileorder name=\"YourPreferredNetwork\" interface=\"Wi-Fi\" priority=1\n```\n\n"
+        "2. Forget the weak network: Settings > Network & Internet > Wi-Fi > Manage known networks. "
+        "Find the weak network and click 'Forget'. Your laptop won't auto-connect to it anymore.\n\n"
+        "3. Disable auto-connect: For networks you want to keep saved but not auto-join, "
+        "go to the network's properties and uncheck 'Connect automatically when in range'.\n\n"
+        "4. Check your Wi-Fi adapter's roaming aggressiveness: Device Manager > Network adapters > "
+        "right-click your Wi-Fi adapter > Properties > Advanced tab > find 'Roaming Aggressiveness' > set it to 'Highest'. "
+        "This makes your laptop switch to stronger signals faster.\n\n"
+        "5. If you have a dual-band router (2.4 GHz and 5 GHz), connect to the 5 GHz network. It's faster but has shorter range. "
+        "If you're close to the router, 5 GHz is always better."
+    ),
+
+    # ── USB Device Not Recognized ──
+    (
+        "I plugged in a USB drive and Windows says 'USB Device Not Recognized.' What do I do?",
+        "This error means Windows detected something was plugged in but can't identify it.\n\n"
+        "1. Try a different USB port: Front USB ports are sometimes flaky. Use a port directly on the back of the computer (these connect directly to the motherboard).\n\n"
+        "2. Try the device on another computer: If it works elsewhere, the problem is your USB ports or drivers. If it doesn't work anywhere, the device might be dead.\n\n"
+        "3. Uninstall and reinstall the USB controller: Device Manager > Universal Serial Bus controllers > right-click 'USB Root Hub' > Uninstall device. "
+        "Do this for each USB Root Hub. Then restart your computer — Windows will reinstall them.\n\n"
+        "4. Check Disk Management: The drive might be recognized but not assigned a letter. "
+        "Right-click Start > Disk Management. Look for the drive. If it shows up without a letter, "
+        "right-click it > 'Change Drive Letter and Paths' > Add > assign a letter.\n\n"
+        "5. Update USB drivers: Device Manager > Universal Serial Bus controllers > right-click each item > Update driver.\n\n"
+        "6. Disable USB selective suspend: Control Panel > Power Options > Change plan settings > Change advanced power settings > "
+        "USB settings > USB selective suspend setting > Disabled. This prevents Windows from turning off USB ports to save power.\n\n"
+        "7. If the drive has data you need and nothing works, try a data recovery tool like Recuva before formatting."
+    ),
+
+    # ── Outlook — Rules ──
+    (
+        "How do I automatically sort incoming emails into folders in Outlook?",
+        "You can create rules in Outlook to automatically move, flag, or categorize emails.\n\n"
+        "1. Open Outlook > go to the Home tab > click 'Rules' > 'Manage Rules & Alerts'.\n\n"
+        "2. Click 'New Rule'. Choose 'Apply rule on messages I receive' for the most flexibility.\n\n"
+        "3. Set conditions: Pick what triggers the rule. Common options:\n"
+        "   - 'from people or public group' — sort by sender\n"
+        "   - 'with specific words in the subject' — sort by topic\n"
+        "   - 'sent to people or public group' — sort by distribution list\n\n"
+        "4. Set actions: Choose what happens when the condition matches:\n"
+        "   - 'move it to the specified folder' — auto-sort into a folder\n"
+        "   - 'flag message for follow up' — auto-flag important emails\n"
+        "   - 'assign it to the category' — color-code emails\n\n"
+        "5. Set exceptions if needed (e.g., 'except if from my manager').\n\n"
+        "6. Name the rule and check 'Run this rule now on messages already in Inbox' to apply it to existing emails.\n\n"
+        "Example: Create a rule that moves all emails from 'notifications@github.com' to a folder called 'GitHub'. "
+        "This keeps your inbox clean while still having those emails available.\n\n"
+        "Tip: Don't create too many rules — they run in order and can conflict. Keep them simple and test each one."
+    ),
+
+    # ── Active Directory — User Management ──
+    (
+        "How do I create a new user in Active Directory?",
+        "There are two ways — the GUI and PowerShell.\n\n"
+        "**GUI method (Active Directory Users and Computers):**\n"
+        "1. Open 'Active Directory Users and Computers' (search for it or run `dsa.msc`).\n"
+        "2. Navigate to the OU (Organizational Unit) where the user should go.\n"
+        "3. Right-click the OU > New > User.\n"
+        "4. Fill in: First name, Last name, User logon name (this is their username).\n"
+        "5. Set a temporary password. Check 'User must change password at next logon'.\n"
+        "6. Click Finish.\n\n"
+        "**PowerShell method (faster for multiple users):**\n"
+        "```powershell\nNew-ADUser -Name 'Jane Smith' `\n"
+        "  -GivenName 'Jane' `\n"
+        "  -Surname 'Smith' `\n"
+        "  -SamAccountName 'jsmith' `\n"
+        "  -UserPrincipalName 'jsmith@contoso.com' `\n"
+        "  -Path 'OU=Employees,DC=contoso,DC=com' `\n"
+        "  -AccountPassword (ConvertTo-SecureString 'TempPass123!' -AsPlainText -Force) `\n"
+        "  -ChangePasswordAtLogon $true `\n"
+        "  -Enabled $true\n```\n\n"
+        "After creating the user:\n"
+        "- Add them to the right security groups for access to shared folders, printers, etc.\n"
+        "- Assign a Microsoft 365 license if needed (in the M365 admin center).\n"
+        "- Set up their email and mailbox.\n"
+        "- Send them their username and temporary password securely (never email a password in plain text)."
+    ),
+
+    # ── Antivirus — Windows Defender ──
+    (
+        "How do I run a full virus scan with Windows Defender?",
+        "Windows Defender (Microsoft Defender Antivirus) is built into Windows 10 and 11.\n\n"
+        "1. Open Windows Security: Search for 'Windows Security' in Start or click the shield icon in the taskbar.\n\n"
+        "2. Click 'Virus & threat protection'.\n\n"
+        "3. Click 'Scan options' (below the Quick scan button).\n\n"
+        "4. Select 'Full scan' and click 'Scan now'. This checks every file on your entire system. It can take 1-3 hours depending on how many files you have.\n\n"
+        "**Other scan types:**\n"
+        "- Quick scan: Checks common malware locations (10-15 minutes). Good for daily use.\n"
+        "- Custom scan: Lets you scan specific folders or drives.\n"
+        "- Microsoft Defender Offline scan: Restarts your PC and scans before Windows loads. Best for stubborn malware that hides while Windows is running.\n\n"
+        "**Command line scan:**\n"
+        "```\ncd \"C:\\Program Files\\Windows Defender\"\nMpCmdRun.exe -Scan -ScanType 2\n```\n"
+        "ScanType 1 = Quick, 2 = Full, 3 = Custom (add -File <path>).\n\n"
+        "**Keep Defender updated:** It updates automatically via Windows Update. To force an update: "
+        "Windows Security > Virus & threat protection > Protection updates > Check for updates.\n\n"
+        "If Defender finds something, follow its recommendations. Most threats can be quarantined or removed automatically."
+    ),
+
+    # ── Network Drive Mapping ──
+    (
+        "How do I map a network drive in Windows?",
+        "Mapping a network drive gives you a drive letter (like Z:) that points to a shared folder on your network.\n\n"
+        "**GUI method:**\n"
+        "1. Open File Explorer.\n"
+        "2. Click 'This PC' in the left panel.\n"
+        "3. Click the '...' menu at the top > 'Map network drive' (or right-click 'This PC' > 'Map network drive').\n"
+        "4. Choose a drive letter (any unused letter).\n"
+        "5. Type the path: `\\\\servername\\sharename` (example: `\\\\fileserver01\\shared-docs`).\n"
+        "6. Check 'Reconnect at sign-in' if you want it permanently.\n"
+        "7. If the server needs different credentials, check 'Connect using different credentials' and enter them.\n\n"
+        "**Command line:**\n"
+        "```\nnet use Z: \\\\servername\\sharename /persistent:yes\n```\n"
+        "With credentials:\n"
+        "```\nnet use Z: \\\\servername\\sharename /user:DOMAIN\\username password /persistent:yes\n```\n\n"
+        "**PowerShell:**\n"
+        "```powershell\nNew-PSDrive -Name Z -PSProvider FileSystem -Root '\\\\servername\\sharename' -Persist\n```\n\n"
+        "**Troubleshooting:**\n"
+        "- 'Network path not found': Check the server name and share name. Try pinging the server: `ping servername`.\n"
+        "- 'Access denied': You don't have permission to the share. Contact your IT admin.\n"
+        "- Drive disappears after restart: Make sure 'Reconnect at sign-in' is checked, and your credentials are saved in Credential Manager."
+    ),
+
+    # ── Blue Screen — Memory ──
+    (
+        "I keep getting a blue screen error that says MEMORY_MANAGEMENT. What does it mean?",
+        "MEMORY_MANAGEMENT blue screens usually mean there's a problem with your RAM or a driver is corrupting memory.\n\n"
+        "1. Run Windows Memory Diagnostic: Search for 'Windows Memory Diagnostic' > choose 'Restart now and check for problems'. "
+        "The computer will restart and test your RAM. Results appear after login — check Event Viewer > Windows Logs > System for the results.\n\n"
+        "2. Run SFC and DISM to fix system file corruption:\n"
+        "```\nsfc /scannow\nDISM /Online /Cleanup-Image /RestoreHealth\n```\n"
+        "Restart after both finish.\n\n"
+        "3. Update all drivers: Outdated graphics or network drivers are a common cause. "
+        "Open Device Manager and update drivers for display adapters, network adapters, and any devices with a yellow warning icon.\n\n"
+        "4. Check for recent changes: Did you install new software, a driver, or a Windows update right before the crashes started? "
+        "Try uninstalling the recent change or using System Restore to go back.\n\n"
+        "5. Check your RAM physically: If the memory diagnostic finds errors, shut down the PC, open the case, "
+        "and reseat the RAM sticks (pull them out and push them back in firmly). If you have two sticks, try running with one at a time to find the bad one.\n\n"
+        "6. Check the crash dump for more details:\n"
+        "```powershell\nGet-EventLog -LogName System -EntryType Error -Newest 10 | Where-Object {$_.EventID -eq 1001}\n```\n"
+        "This shows recent crash details including which driver was involved."
+    ),
+
+    # ── Intune / MDM ──
+    (
+        "What is Microsoft Intune and how does it manage devices?",
+        "Microsoft Intune is a cloud-based device management tool. It lets IT admins manage laptops, phones, and tablets remotely without needing an on-premises server.\n\n"
+        "**What it does:**\n"
+        "- Push security policies to devices (require passwords, encryption, screen lock).\n"
+        "- Deploy apps to devices remotely (install software without touching the machine).\n"
+        "- Enforce compliance rules (block access if a device doesn't meet security standards).\n"
+        "- Wipe lost or stolen devices remotely.\n"
+        "- Manage Windows, macOS, iOS, and Android devices from one console.\n\n"
+        "**How it works:**\n"
+        "1. User enrolls their device: They go to Settings > Accounts > 'Access work or school' > Connect, and sign in with their work account.\n"
+        "2. Intune installs a management profile on the device.\n"
+        "3. IT policies are automatically applied — things like requiring BitLocker encryption, blocking USB drives, or installing the company VPN.\n\n"
+        "**Common admin tasks:**\n"
+        "- Sign in at endpoint.microsoft.com (Intune admin center).\n"
+        "- Devices > All devices: see all enrolled devices and their compliance status.\n"
+        "- Apps > All apps: deploy software to devices or groups of users.\n"
+        "- Endpoint security > Antivirus, Firewall, Disk encryption: manage security settings.\n\n"
+        "**Intune vs Group Policy:** Group Policy works only for domain-joined Windows PCs on the company network. "
+        "Intune works anywhere with internet — perfect for remote workers and personal devices (BYOD)."
+    ),
+
+    # ── Proxy Settings ──
+    (
+        "Users are complaining they can't access the internet. The browser says 'checking proxy settings.' How do I fix this?",
+        "This usually means a proxy is configured but not working, or it was set by malware.\n\n"
+        "1. Check proxy settings: Settings > Network & Internet > Proxy. "
+        "If 'Use a proxy server' is On and you don't use a proxy, turn it Off. Also check 'Use setup script' — turn it Off if there's no valid PAC URL.\n\n"
+        "2. Check Internet Options: Control Panel > Internet Options > Connections tab > LAN settings. "
+        "Uncheck 'Use a proxy server' and 'Use automatic configuration script' unless your company actually uses one.\n\n"
+        "3. Check via command line:\n"
+        "```\nnetsh winhttp show proxy\n```\n"
+        "If it shows a proxy you don't expect, reset it:\n"
+        "```\nnetsh winhttp reset proxy\n```\n\n"
+        "4. Check for malware: Some malware sets a proxy to intercept your traffic. "
+        "Run a full scan with Windows Defender and Malwarebytes. Check browser extensions too — "
+        "a malicious extension can force a proxy setting in the browser.\n\n"
+        "5. If your company uses a proxy: Make sure the proxy server is running and reachable. "
+        "Try pinging it. If the proxy server is down, users can't browse. "
+        "As a temporary fix, you can bypass the proxy by clearing the settings (but this might violate company policy).\n\n"
+        "6. Check Group Policy: If proxy settings keep coming back after you change them, "
+        "a GPO might be enforcing them: `gpresult /r` shows applied policies."
+    ),
+
+    # ── Email — SPF/DKIM/DMARC ──
+    (
+        "Our company emails keep going to spam. How do I fix email deliverability?",
+        "Emails landing in spam usually means your domain's email authentication records are missing or misconfigured.\n\n"
+        "**Check these three DNS records:**\n\n"
+        "1. **SPF (Sender Policy Framework):** Tells receiving servers which mail servers are allowed to send email for your domain.\n"
+        "   - Check: `nslookup -type=txt yourdomain.com` — look for a record starting with `v=spf1`.\n"
+        "   - Example: `v=spf1 include:spf.protection.outlook.com -all`\n"
+        "   - If missing, add it as a TXT record in your DNS provider.\n\n"
+        "2. **DKIM (DomainKeys Identified Mail):** Adds a digital signature to emails proving they haven't been tampered with.\n"
+        "   - For Microsoft 365: Admin center > Settings > Domains > select your domain > DNS records. Follow the CNAME records it gives you.\n"
+        "   - Enable DKIM signing in the Exchange admin center > Mail flow > DKIM.\n\n"
+        "3. **DMARC (Domain-based Message Authentication):** Tells receiving servers what to do when SPF or DKIM fail.\n"
+        "   - Add a TXT record: `_dmarc.yourdomain.com` with value `v=DMARC1; p=quarantine; rua=mailto:dmarc@yourdomain.com`\n"
+        "   - Start with `p=none` to monitor, then move to `p=quarantine` or `p=reject`.\n\n"
+        "**Other things to check:**\n"
+        "- Make sure your mail server IP isn't on a blacklist: check at mxtoolbox.com.\n"
+        "- Avoid spammy words in subject lines.\n"
+        "- Don't send mass emails from your primary domain — use a subdomain."
+    ),
+
+    # ── Phone / Mobile ──
+    (
+        "How do I set up my work email on my iPhone?",
+        "Depends on what type of email your company uses.\n\n"
+        "**Microsoft 365 / Exchange (most common):**\n"
+        "1. Download the Outlook app from the App Store (recommended by most IT departments).\n"
+        "2. Open Outlook > tap 'Add Account' > enter your work email > sign in.\n"
+        "3. If your company uses MFA, complete the verification.\n"
+        "4. Calendar, contacts, and email will all sync automatically.\n\n"
+        "**Using the built-in Mail app:**\n"
+        "1. Settings > Mail > Accounts > Add Account.\n"
+        "2. Choose 'Microsoft Exchange' (for Outlook/M365) or 'Google' (for Google Workspace).\n"
+        "3. Enter your email and password.\n"
+        "4. Choose what to sync: Mail, Contacts, Calendars, Reminders.\n\n"
+        "**Google Workspace:**\n"
+        "1. Settings > Mail > Accounts > Add Account > Google.\n"
+        "2. Sign in with your work Google account.\n\n"
+        "**Troubleshooting:**\n"
+        "- 'Cannot verify server identity': Your company's security certificate might need to be installed. Contact your IT admin.\n"
+        "- Account keeps asking for password: Remove the account and re-add it. Check if MFA is required.\n"
+        "- Email not syncing: Check Settings > Mail > Accounts > Fetch New Data. Set it to 'Push' for instant delivery or choose a fetch schedule."
+    ),
+
+    # ── Windows Activation ──
+    (
+        "Windows says 'Activate Windows' in the corner of my screen. What do I do?",
+        "This means your Windows license is not activated. There are several reasons this can happen.\n\n"
+        "1. Check your activation status: Settings > System > Activation. It will show the error message.\n\n"
+        "2. **If you have a product key:** Settings > System > Activation > Change product key. Enter your 25-character key.\n\n"
+        "3. **If you recently changed hardware:** A new motherboard or major hardware change can deactivate Windows. "
+        "Go to Activation > Troubleshoot. If you linked your license to a Microsoft account before the change, "
+        "select 'I changed hardware on this device recently' and sign in to reactivate.\n\n"
+        "4. **Command line activation:**\n"
+        "```\nslmgr /ato\n```\n"
+        "This forces Windows to attempt activation with Microsoft's servers.\n\n"
+        "5. **For work computers:** Your company probably uses a KMS (Key Management Service) or MAK key. "
+        "Connect to the company network (or VPN) and run:\n"
+        "```\nslmgr /ato\n```\n"
+        "If that doesn't work, contact your IT admin — the KMS server might be down or your machine isn't pointing to it.\n\n"
+        "6. **Check your license type:**\n"
+        "```\nslmgr /dli\n```\n"
+        "This shows what type of license you have (Retail, OEM, Volume) and its status."
+    ),
+
+    # ── Task Scheduler ──
+    (
+        "How do I schedule a script to run automatically every day on Windows?",
+        "Use Task Scheduler — it's built into Windows.\n\n"
+        "1. Open Task Scheduler: Search for 'Task Scheduler' in Start.\n\n"
+        "2. Click 'Create Basic Task' on the right panel.\n\n"
+        "3. Give it a name (e.g., 'Daily Backup Script') and click Next.\n\n"
+        "4. Set the trigger: Choose 'Daily' > set the start time > click Next.\n\n"
+        "5. Set the action: Choose 'Start a program'.\n"
+        "   - For a batch file: Program = the path to your .bat file.\n"
+        "   - For a PowerShell script: Program = `powershell.exe`, Add arguments = `-File C:\\scripts\\your-script.ps1`\n"
+        "   - For a Python script: Program = `python.exe`, Add arguments = `C:\\scripts\\your-script.py`\n\n"
+        "6. Click Finish.\n\n"
+        "**Important settings (edit the task after creating):**\n"
+        "- Right-click the task > Properties.\n"
+        "- General tab: Select 'Run whether user is logged on or not' (so it runs even when nobody is logged in). "
+        "Check 'Run with highest privileges' if the script needs admin access.\n"
+        "- Settings tab: Check 'If the task fails, restart every 5 minutes' for critical scripts.\n\n"
+        "**PowerShell method:**\n"
+        "```powershell\n$action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-File C:\\scripts\\backup.ps1'\n"
+        "$trigger = New-ScheduledTaskTrigger -Daily -At '2:00AM'\n"
+        "Register-ScheduledTask -TaskName 'DailyBackup' -Action $action -Trigger $trigger -RunLevel Highest\n```\n\n"
+        "Test it by right-clicking the task > Run to make sure it works before waiting for the schedule."
+    ),
+
+    # ── Safe Mode ──
+    (
+        "How do I boot Windows into Safe Mode?",
+        "Safe Mode starts Windows with only the basic drivers and services. It's useful for troubleshooting crashes, driver issues, and malware.\n\n"
+        "**Method 1 — From Settings (if Windows boots normally):**\n"
+        "Settings > System > Recovery > Advanced startup > Restart now. "
+        "After restart: Troubleshoot > Advanced options > Startup Settings > Restart. "
+        "Press 4 for Safe Mode or 5 for Safe Mode with Networking.\n\n"
+        "**Method 2 — From the login screen:**\n"
+        "Hold Shift and click the Power icon > Restart. Same menu appears: "
+        "Troubleshoot > Advanced options > Startup Settings > Restart.\n\n"
+        "**Method 3 — If Windows won't boot at all:**\n"
+        "Force power off 3 times during boot (hold the power button while the Windows logo shows). "
+        "On the fourth try, Windows enters Automatic Repair. Click Advanced options > Troubleshoot > Advanced options > Startup Settings.\n\n"
+        "**Method 4 — Command line:**\n"
+        "```\nbcdedit /set {default} safeboot minimal\n```\n"
+        "Restart and Windows boots into Safe Mode. To turn it off:\n"
+        "```\nbcdedit /deletevalue {default} safeboot\n```\n"
+        "Then restart normally.\n\n"
+        "**What to do in Safe Mode:**\n"
+        "- Uninstall problematic drivers or software.\n"
+        "- Run antivirus scans.\n"
+        "- Use System Restore to go back to a working state.\n"
+        "- Check Event Viewer for error details."
+    ),
+
+    # ── Excel — Common Issues ──
+    (
+        "Excel keeps crashing when I open a specific file. Other files open fine.",
+        "A single file crashing Excel usually means the file itself has a problem.\n\n"
+        "1. Try opening in Safe Mode: Hold Ctrl while clicking Excel to start it in Safe Mode (disables add-ins). "
+        "Then try opening the file. If it works, an add-in is conflicting — disable them one by one (File > Options > Add-ins).\n\n"
+        "2. Repair the file: Open Excel > File > Open > browse to the file but don't double-click it. "
+        "Click the dropdown arrow on the 'Open' button > select 'Open and Repair'. Try 'Repair' first, then 'Extract Data' if repair fails.\n\n"
+        "3. Copy data to a new file: If the file opens briefly before crashing, quickly select all data (Ctrl+A), copy (Ctrl+C), "
+        "open a new blank workbook, and paste (Ctrl+V). Save the new file with a different name.\n\n"
+        "4. Check file size: Extremely large files (over 50 MB) can cause crashes, especially with lots of formulas. "
+        "Try removing unnecessary data, formatting, or pivot tables.\n\n"
+        "5. Update Office: File > Account > Update Options > Update Now. Bugs that cause crashes are often fixed in updates.\n\n"
+        "6. Check for external links: Go to Data tab > Edit Links. Broken links to other files can cause crashes. "
+        "Break any links that point to files that no longer exist.\n\n"
+        "7. Clear conditional formatting: If the file has thousands of conditional formatting rules, it can crash. "
+        "Home > Conditional Formatting > Clear Rules > Clear Rules from Entire Sheet."
+    ),
+
+    # ── macOS — Force Quit ──
+    (
+        "An app on my Mac is frozen and won't close. How do I force quit it?",
+        "There are several ways to force quit a frozen app on Mac:\n\n"
+        "1. **Keyboard shortcut (fastest):** Press Command + Option + Escape. "
+        "The Force Quit window opens. Select the frozen app and click 'Force Quit'.\n\n"
+        "2. **From the Apple menu:** Click the Apple logo in the top-left corner > Force Quit. Select the app and click 'Force Quit'.\n\n"
+        "3. **From the Dock:** Right-click (or Control-click) the app's icon in the Dock. "
+        "Hold the Option key and 'Quit' changes to 'Force Quit'. Click it.\n\n"
+        "4. **Activity Monitor (for stubborn apps):** Open Activity Monitor (search in Spotlight with Cmd+Space). "
+        "Find the app in the list, select it, and click the X button in the toolbar > Force Quit.\n\n"
+        "5. **Terminal (last resort):**\n"
+        "```\nkillall AppName\n```\n"
+        "Example: `killall Safari`. If that doesn't work:\n"
+        "```\nps aux | grep AppName\nkill -9 <PID>\n```\n\n"
+        "If apps freeze frequently, it might be a memory issue. Check Activity Monitor > Memory tab to see if you're running out of RAM. "
+        "Close apps you're not using, and consider if you need more RAM for your workload."
+    ),
+
+    # ── RAID ──
+    (
+        "What is RAID and which RAID level should I use for my server?",
+        "RAID (Redundant Array of Independent Disks) combines multiple drives for performance, redundancy, or both.\n\n"
+        "**Common RAID levels:**\n\n"
+        "**RAID 0 (Striping):** Data is split across drives. Fast but NO redundancy — if one drive fails, all data is lost. "
+        "Use only for temporary data or when speed is the only concern. Minimum: 2 drives.\n\n"
+        "**RAID 1 (Mirroring):** Data is copied identically to two drives. If one fails, the other has a complete copy. "
+        "You lose half your capacity (two 1TB drives = 1TB usable). Good for: OS drives, small servers. Minimum: 2 drives.\n\n"
+        "**RAID 5 (Striping with parity):** Data is spread across drives with one drive's worth of parity for recovery. "
+        "Can survive one drive failure. Good balance of speed, capacity, and safety. "
+        "You lose one drive's worth of capacity (three 1TB drives = 2TB usable). Minimum: 3 drives.\n\n"
+        "**RAID 6 (Double parity):** Like RAID 5 but can survive two drive failures. Better for large arrays. "
+        "Loses two drives' worth of capacity. Minimum: 4 drives.\n\n"
+        "**RAID 10 (1+0, Mirroring + Striping):** Combines RAID 1 and RAID 0. Fast and redundant but expensive — "
+        "you lose half your capacity. Best for databases and high-performance servers. Minimum: 4 drives.\n\n"
+        "**Recommendations:**\n"
+        "- File server: RAID 5 or RAID 6\n"
+        "- Database server: RAID 10\n"
+        "- Workstation: RAID 1\n"
+        "- RAID is NOT a backup. Always have separate backups."
+    ),
+
+    # ── Docker Basics ──
+    (
+        "What is Docker and how do I run a basic container?",
+        "Docker lets you run applications in isolated containers. A container is like a lightweight virtual machine — "
+        "it packages an app with everything it needs (code, libraries, settings) so it runs the same everywhere.\n\n"
+        "**Install Docker:**\n"
+        "- Windows/Mac: Download Docker Desktop from docker.com.\n"
+        "- Linux: Follow the install guide for your distro at docs.docker.com.\n\n"
+        "**Basic commands:**\n"
+        "```bash\n# Check Docker is working\ndocker --version\n\n"
+        "# Run a simple container (downloads the image if needed)\ndocker run hello-world\n\n"
+        "# Run an Ubuntu container and get a shell inside it\ndocker run -it ubuntu bash\n\n"
+        "# Run Nginx web server on port 8080\ndocker run -d -p 8080:80 nginx\n# Then open http://localhost:8080 in your browser\n\n"
+        "# List running containers\ndocker ps\n\n"
+        "# Stop a container\ndocker stop <container-id>\n\n"
+        "# List all containers (including stopped)\ndocker ps -a\n\n"
+        "# Remove a container\ndocker rm <container-id>\n\n"
+        "# List downloaded images\ndocker images\n```\n\n"
+        "**Key concepts:**\n"
+        "- Image: A template (like a snapshot). Read-only.\n"
+        "- Container: A running instance of an image. You can have many containers from one image.\n"
+        "- Dockerfile: A script that builds a custom image.\n"
+        "- Docker Hub: A public registry where you find images (hub.docker.com).\n\n"
+        "Docker is great for testing software, running databases locally, and deploying apps consistently across environments."
+    ),
+
+    # ── Networking — Port Forwarding ──
+    (
+        "What is port forwarding and how do I set it up on my router?",
+        "Port forwarding tells your router to send traffic arriving on a specific port to a specific device on your network. "
+        "It's used when you want something on your local network to be accessible from the internet — like a game server, a security camera, or a web server.\n\n"
+        "**How to set it up:**\n"
+        "1. Find your router's admin page: Open a browser and go to your router's IP (usually 192.168.1.1 or 192.168.0.1). "
+        "Log in with the admin credentials (check the sticker on the router if you haven't changed them).\n\n"
+        "2. Find the port forwarding section: Look under Advanced, NAT, Firewall, or Virtual Servers. Every router's menu is different.\n\n"
+        "3. Create a rule:\n"
+        "   - Service name: Give it a label (e.g., 'Minecraft Server')\n"
+        "   - External port: The port people will connect to from outside\n"
+        "   - Internal port: Usually the same as external\n"
+        "   - Internal IP: The local IP of the device running the service (e.g., 192.168.1.50)\n"
+        "   - Protocol: TCP, UDP, or Both (depends on the application)\n\n"
+        "4. Save and restart the router if needed.\n\n"
+        "**Important security notes:**\n"
+        "- Only forward ports you actually need. Every open port is an entry point.\n"
+        "- Never forward ports for RDP (3389) directly to the internet — use a VPN instead.\n"
+        "- Give the target device a static IP or DHCP reservation so its IP doesn't change.\n"
+        "- Test it from outside your network using a tool like canyouseeme.org."
+    ),
+
+    # ── Networking — Traceroute ──
+    (
+        "My connection to a specific website is very slow. How do I figure out where the problem is?",
+        "Use traceroute to see every hop (router) between you and the website. This shows where the slowdown happens.\n\n"
+        "**Windows:**\n"
+        "```\ntracert google.com\n```\n\n"
+        "**Mac/Linux:**\n"
+        "```\ntraceroute google.com\n```\n\n"
+        "**Reading the results:**\n"
+        "Each line shows a hop with three response times in milliseconds. Look for:\n"
+        "- A big jump in response times (e.g., 20ms → 200ms) — that hop or the network between it is the bottleneck.\n"
+        "- Asterisks (* * *) — that router is blocking traceroute (common and not always a problem).\n"
+        "- Timeouts at the end — the destination server might be down or blocking ICMP.\n\n"
+        "**What the hops mean:**\n"
+        "- First 1-2 hops: Your router and your ISP's equipment. If slow here, the problem is your local network or ISP.\n"
+        "- Middle hops: Internet backbone routers. If slow here, it's a backbone issue you can't control.\n"
+        "- Last hops: The destination's network. If slow here, the website's infrastructure is the problem.\n\n"
+        "**Also try:**\n"
+        "```\nping google.com -n 20\n```\n"
+        "This sends 20 pings. Check the average time and packet loss percentage. Over 5% packet loss means an unstable connection.\n\n"
+        "If your ISP is the bottleneck, call them with the traceroute results as evidence."
+    ),
+
+    # ── Linux — File Permissions ──
+    (
+        "I'm getting 'Permission denied' when trying to run a script on Linux. What do I do?",
+        "The file doesn't have execute permission. In Linux, every file has read (r), write (w), and execute (x) permissions for the owner, group, and others.\n\n"
+        "1. Check current permissions:\n"
+        "```\nls -la script.sh\n```\n"
+        "You'll see something like `-rw-r--r--`. The first group (rw-) is owner, second (r--) is group, third (r--) is others. "
+        "No 'x' means nobody can execute it.\n\n"
+        "2. Add execute permission:\n"
+        "```\nchmod +x script.sh\n```\n"
+        "Now run it with:\n"
+        "```\n./script.sh\n```\n\n"
+        "3. If you still get 'Permission denied' even after chmod:\n"
+        "   - Check if the filesystem is mounted with `noexec`: `mount | grep noexec`. If so, you can't execute files from that partition.\n"
+        "   - Check if you own the file: `ls -la script.sh` shows the owner. If someone else owns it, use `sudo chmod +x script.sh`.\n\n"
+        "**Permission numbers:**\n"
+        "- `chmod 755 script.sh` — owner can read/write/execute, everyone else can read/execute (most common for scripts).\n"
+        "- `chmod 700 script.sh` — only the owner can read/write/execute.\n"
+        "- `chmod 644 file.txt` — owner can read/write, everyone else can only read (common for regular files).\n\n"
+        "**Common mistake:** Running `chmod 777` gives full permissions to everyone. Avoid this — it's a security risk. Use 755 for scripts and 644 for files."
+    ),
+
+    # ── Windows — Disk Partition ──
+    (
+        "How do I partition a hard drive in Windows without losing data?",
+        "You can shrink an existing partition to create free space, then make a new partition from it.\n\n"
+        "1. Open Disk Management: Right-click Start > Disk Management.\n\n"
+        "2. Shrink the existing partition: Right-click the partition you want to shrink (usually C:) > 'Shrink Volume'. "
+        "Enter how much space to free up in MB (e.g., 50000 for ~50 GB). Click 'Shrink'. This won't delete any data.\n\n"
+        "3. Create the new partition: Right-click the 'Unallocated' space that appears > 'New Simple Volume'. "
+        "Follow the wizard — assign a drive letter, choose NTFS, and give it a label (like 'Data').\n\n"
+        "**PowerShell method:**\n"
+        "```powershell\n# See partitions\nGet-Partition\n\n"
+        "# Shrink C: by 50 GB\nResize-Partition -DriveLetter C -Size (Get-PartitionSupportedSize -DriveLetter C).SizeMin\n\n"
+        "# Create new partition from unallocated space\nNew-Partition -DiskNumber 0 -UseMaximumSize -AssignDriveLetter\nFormat-Volume -DriveLetter D -FileSystem NTFS -NewFileSystemLabel 'Data'\n```\n\n"
+        "**Limitations:**\n"
+        "- You can only shrink by the amount of contiguous free space. If you can't shrink enough, defragment the drive first.\n"
+        "- System partitions (EFI, Recovery) can't be moved through Disk Management. Use a third-party tool like MiniTool Partition Wizard for more flexibility.\n"
+        "- Always back up important data before modifying partitions, even though shrinking is usually safe."
+    ),
+
+    # ── Azure AD / Entra ID ──
+    (
+        "What is Azure AD (Entra ID) and how is it different from regular Active Directory?",
+        "Azure AD (now called Microsoft Entra ID) is the cloud version of Active Directory. They serve the same purpose — "
+        "managing users and controlling access — but work differently.\n\n"
+        "**Traditional Active Directory (AD DS):**\n"
+        "- Runs on a server in your office (on-premises).\n"
+        "- Uses LDAP and Kerberos for authentication.\n"
+        "- Manages domain-joined Windows PCs on the company network.\n"
+        "- Requires line-of-sight to the domain controller (or VPN).\n"
+        "- Uses Group Policy (GPOs) to manage devices.\n\n"
+        "**Azure AD / Entra ID:**\n"
+        "- Runs in Microsoft's cloud (no server to manage).\n"
+        "- Uses OAuth 2.0, SAML, and OpenID Connect for authentication.\n"
+        "- Manages cloud identities — works from anywhere with internet.\n"
+        "- Handles single sign-on (SSO) for cloud apps like Microsoft 365, Salesforce, Slack.\n"
+        "- Uses Intune and Conditional Access policies instead of GPOs.\n\n"
+        "**Most companies use both (hybrid):**\n"
+        "- On-prem AD for local resources (file shares, printers, legacy apps).\n"
+        "- Azure AD for cloud apps and remote access.\n"
+        "- Azure AD Connect syncs users between the two.\n\n"
+        "**Key Azure AD features:**\n"
+        "- Conditional Access: Block or allow access based on location, device, risk level.\n"
+        "- MFA: Require multi-factor authentication for sensitive apps.\n"
+        "- SSO: Users sign in once and access all their cloud apps.\n"
+        "- Self-service password reset: Users reset their own passwords without calling IT."
+    ),
+
+    # ── Printer — Network ──
+    (
+        "How do I add a network printer in Windows?",
+        "There are several ways to connect to a network printer.\n\n"
+        "**Method 1 — Automatic discovery:**\n"
+        "1. Settings > Bluetooth & devices > Printers & scanners > Add device.\n"
+        "2. Windows will search for printers on your network. Select yours and click Add.\n\n"
+        "**Method 2 — By IP address (more reliable):**\n"
+        "1. Settings > Printers & scanners > Add device > 'The printer I want isn't listed'.\n"
+        "2. Select 'Add a printer using a TCP/IP address'.\n"
+        "3. Enter the printer's IP address (usually printed on a config page — press the info button on the printer).\n"
+        "4. Windows will detect the model and install the driver.\n\n"
+        "**Method 3 — Shared from another computer:**\n"
+        "1. Open File Explorer and type `\\\\computername` in the address bar (replace with the name of the PC sharing the printer).\n"
+        "2. Double-click the printer to connect. Windows installs the driver automatically.\n\n"
+        "**Method 4 — PowerShell:**\n"
+        "```powershell\nAdd-Printer -ConnectionName '\\\\printserver\\HP-LaserJet'\n```\n\n"
+        "**Troubleshooting:**\n"
+        "- Printer not found: Make sure it's on the same network (same subnet). Try pinging its IP.\n"
+        "- Driver issues: Download the driver from the manufacturer's website. Run the installer before adding the printer.\n"
+        "- Prints to wrong tray or wrong size: Right-click the printer > Printing Preferences > set the default paper size and tray."
+    ),
+
+    # ── Windows — Registry ──
+    (
+        "What is the Windows Registry and when would I need to edit it?",
+        "The Windows Registry is a database that stores settings for Windows and installed programs. "
+        "Think of it as the master configuration file for your entire system.\n\n"
+        "**When you might need to edit it:**\n"
+        "- Removing leftover entries from uninstalled software.\n"
+        "- Tweaking Windows behavior that has no GUI setting.\n"
+        "- Fixing problems where a normal setting won't stick.\n"
+        "- Applying fixes recommended by Microsoft support articles.\n\n"
+        "**How to open it:**\n"
+        "Press Win+R > type `regedit` > press Enter. You need admin rights.\n\n"
+        "**Main sections (hives):**\n"
+        "- HKEY_CURRENT_USER (HKCU): Settings for the current user.\n"
+        "- HKEY_LOCAL_MACHINE (HKLM): Settings for the entire computer.\n"
+        "- HKEY_CLASSES_ROOT: File type associations.\n\n"
+        "**Safety rules:**\n"
+        "1. Always back up before editing: File > Export > save a .reg file. If something breaks, double-click the .reg file to restore.\n"
+        "2. Only change what you know. Random changes can make Windows unbootable.\n"
+        "3. Follow exact instructions from trusted sources (Microsoft docs, reputable tech sites).\n\n"
+        "**Example — disable Bing search in Start menu (Windows 11):**\n"
+        "Navigate to: `HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer`\n"
+        "Create a new DWORD value called `DisableSearchBoxSuggestions` and set it to 1. Restart Explorer or reboot.\n\n"
+        "If you're not comfortable editing the Registry directly, you can make a .reg file in Notepad and import it."
+    ),
+
+    # ── Networking — VLAN ──
+    (
+        "What is a VLAN and why would I use one?",
+        "A VLAN (Virtual LAN) divides one physical network switch into multiple separate networks. "
+        "Devices on different VLANs can't talk to each other unless a router connects them.\n\n"
+        "**Why use VLANs:**\n"
+        "- Security: Keep sensitive systems (like servers or security cameras) separate from regular user traffic.\n"
+        "- Performance: Reduce broadcast traffic. Without VLANs, every broadcast reaches every device on the switch.\n"
+        "- Organization: Group devices by department or function regardless of physical location.\n"
+        "- Compliance: Some regulations (like PCI-DSS) require network segmentation.\n\n"
+        "**Common VLAN setup:**\n"
+        "- VLAN 10: Staff computers\n"
+        "- VLAN 20: VoIP phones\n"
+        "- VLAN 30: Printers and IoT devices\n"
+        "- VLAN 40: Guest Wi-Fi\n"
+        "- VLAN 100: Servers\n\n"
+        "**How to set up (on a managed switch):**\n"
+        "1. Log into the switch's web interface.\n"
+        "2. Create VLANs with IDs (e.g., VLAN 10, VLAN 20).\n"
+        "3. Assign ports to VLANs (e.g., ports 1-12 = VLAN 10, ports 13-24 = VLAN 20).\n"
+        "4. Set trunk ports between switches (trunk ports carry traffic for multiple VLANs).\n"
+        "5. Configure a router or Layer 3 switch for inter-VLAN routing if VLANs need to communicate.\n\n"
+        "**Note:** Unmanaged switches (the cheap ones without a web interface) don't support VLANs. You need a managed switch."
+    ),
+
+    # ── Windows Update — WSUS ──
+    (
+        "What is WSUS and how does it help manage Windows updates in a company?",
+        "WSUS (Windows Server Update Services) is a free Microsoft tool that lets you control Windows updates across your organization "
+        "from a central server instead of each PC downloading updates individually from the internet.\n\n"
+        "**Why use WSUS:**\n"
+        "- Control which updates get installed (approve or decline specific updates).\n"
+        "- Test updates before rolling them out company-wide.\n"
+        "- Save internet bandwidth — updates download once to the WSUS server, then distribute locally.\n"
+        "- Track which computers are up to date and which are missing patches.\n"
+        "- Schedule update installation during maintenance windows.\n\n"
+        "**How it works:**\n"
+        "1. WSUS server downloads updates from Microsoft Update.\n"
+        "2. Admin reviews and approves updates in the WSUS console.\n"
+        "3. Client PCs check the WSUS server (not Microsoft) for updates.\n"
+        "4. Approved updates install on client PCs based on Group Policy settings.\n\n"
+        "**Setting up clients via Group Policy:**\n"
+        "1. Open Group Policy Management > create or edit a GPO.\n"
+        "2. Computer Configuration > Administrative Templates > Windows Components > Windows Update.\n"
+        "3. Set 'Specify intranet Microsoft update service location' to your WSUS server URL (e.g., http://wsus-server:8530).\n"
+        "4. Configure auto-update behavior: download and schedule install, or notify only.\n\n"
+        "**Alternative:** For cloud-managed environments, Microsoft Intune with Windows Update for Business is the modern replacement for WSUS."
+    ),
+
+    # ── PowerShell — Remote Management ──
+    (
+        "How do I run PowerShell commands on a remote computer?",
+        "PowerShell Remoting lets you run commands on other computers over the network.\n\n"
+        "**One-time setup (on the remote computer):**\n"
+        "```powershell\nEnable-PSRemoting -Force\n```\n"
+        "This enables WinRM (Windows Remote Management) and sets up the firewall rule.\n\n"
+        "**Run a single command on a remote PC:**\n"
+        "```powershell\nInvoke-Command -ComputerName SERVER01 -ScriptBlock { Get-Service | Where-Object Status -eq 'Stopped' }\n```\n\n"
+        "**Open an interactive session (like SSH):**\n"
+        "```powershell\nEnter-PSSession -ComputerName SERVER01\n```\n"
+        "Now every command you type runs on SERVER01. Type `Exit-PSSession` to return.\n\n"
+        "**Run a command on multiple computers at once:**\n"
+        "```powershell\nInvoke-Command -ComputerName SERVER01, SERVER02, SERVER03 -ScriptBlock {\n"
+        "    Get-EventLog -LogName System -Newest 5 -EntryType Error\n}\n```\n\n"
+        "**Using credentials:**\n"
+        "```powershell\n$cred = Get-Credential\nInvoke-Command -ComputerName SERVER01 -Credential $cred -ScriptBlock { hostname }\n```\n\n"
+        "**Troubleshooting:**\n"
+        "- 'Access denied': You need admin rights on the remote computer. Use domain admin credentials.\n"
+        "- 'WinRM cannot process the request': WinRM service isn't running on the remote PC. Start it: `sc \\\\SERVER01 start WinRM`.\n"
+        "- Workgroup computers: You need to add the remote PC to the trusted hosts list:\n"
+        "```powershell\nSet-Item WSMan:\\localhost\\Client\\TrustedHosts -Value 'SERVER01'\n```"
+    ),
+
+    # ── OneDrive Sync Issues ──
+    (
+        "OneDrive sync is stuck. It shows a spinning icon but files aren't uploading.",
+        "OneDrive sync getting stuck is common. Here's how to fix it step by step:\n\n"
+        "1. Pause and resume sync: Click the OneDrive icon in the taskbar > click the gear icon > Pause syncing > wait 10 seconds > Resume syncing. This often clears temporary glitches.\n\n"
+        "2. Check for problem files:\n"
+        "   - File names with special characters (# % & { } \\ < > * ? / $ ! ' \" @ +) cause sync failures.\n"
+        "   - Files over 250 GB can't sync.\n"
+        "   - File paths longer than 400 characters fail.\n"
+        "   Rename any problematic files.\n\n"
+        "3. Reset OneDrive: Open Run (Win+R) and type:\n"
+        "```\n%localappdata%\\Microsoft\\OneDrive\\onedrive.exe /reset\n```\n"
+        "Wait 2 minutes. If OneDrive doesn't restart on its own, search for it in Start and open it.\n\n"
+        "4. Check storage space: Make sure your OneDrive isn't full. Sign in at onedrive.com > click the gear > Settings > see your storage usage.\n\n"
+        "5. Check your internet: OneDrive needs a stable connection. Large uploads can fail on unreliable Wi-Fi.\n\n"
+        "6. Unlink and relink your account: OneDrive Settings > Account > Unlink this PC. Then sign in again. "
+        "Your files stay on your computer — it just re-syncs everything.\n\n"
+        "7. Check the sync status: Click the OneDrive icon > 'View sync problems' to see exactly which files are stuck and why."
+    ),
+
+    # ── Troubleshooting Methodology ──
+    (
+        "I'm new to IT support. What's a good troubleshooting methodology?",
+        "Good troubleshooting follows a structured approach. Here's a methodology that works for almost any IT problem:\n\n"
+        "**1. Identify the problem:**\n"
+        "- Ask: What exactly is happening? What error message do you see?\n"
+        "- Ask: When did it start? What changed? Did you install anything new?\n"
+        "- Ask: Does it affect just you or other people too?\n"
+        "- Reproduce the issue yourself if possible.\n\n"
+        "**2. Establish what's working:**\n"
+        "- Can you reach other websites? Can you print to other printers? Does it work on a different computer?\n"
+        "- This narrows down where the problem is: user, device, network, or server.\n\n"
+        "**3. Check the simple stuff first:**\n"
+        "- Is it plugged in? Is it turned on? Is the cable connected?\n"
+        "- Have you restarted? (Seriously — this fixes more problems than anything else.)\n"
+        "- Is the service or server up? Check status pages.\n\n"
+        "**4. Divide and conquer:**\n"
+        "- Split the problem in half. Is it a network issue or a software issue? "
+        "If network, is it local or internet? If local, is it the cable or the switch?\n"
+        "- Each test eliminates half the possibilities.\n\n"
+        "**5. Change one thing at a time:**\n"
+        "- If you change three things and it works, you don't know which one fixed it. "
+        "Change one, test, repeat.\n\n"
+        "**6. Document what you did:**\n"
+        "- Write down the problem, what you tried, and what fixed it. "
+        "Next time someone has the same issue, you (or a teammate) can fix it in minutes.\n\n"
+        "**7. Verify the fix:**\n"
+        "- Ask the user to confirm it's working. Check back later — some fixes are temporary."
+    ),
+
+    # ── MFA / Two-Factor ──
+    (
+        "A user can't log in because their MFA (multi-factor authentication) isn't working. How do I help them?",
+        "MFA issues are one of the most common help desk tickets. Here's how to resolve them:\n\n"
+        "**If using Microsoft 365 / Azure AD:**\n\n"
+        "1. Check if the user's phone has the right time: MFA codes (TOTP) are time-based. "
+        "If the phone's clock is off by more than 30 seconds, codes won't work. "
+        "Tell them to enable automatic time on their phone (Settings > Date & Time > Automatic).\n\n"
+        "2. Try an alternative method: On the MFA prompt, click 'Sign in another way'. "
+        "Options include: phone call, text message, or backup codes.\n\n"
+        "3. Reset their MFA (admin action):\n"
+        "   - Sign in to the Microsoft 365 admin center.\n"
+        "   - Users > Active users > select the user > Manage multifactor authentication.\n"
+        "   - Click 'Require re-register multifactor authentication'.\n"
+        "   - The user will be prompted to set up MFA again on their next login.\n\n"
+        "4. Generate a temporary access pass (if available):\n"
+        "   - Azure AD > Users > select user > Authentication methods > Add method > Temporary Access Pass.\n"
+        "   - Give them the pass — it works for one login and expires.\n\n"
+        "**Prevention:**\n"
+        "- Always register multiple MFA methods (phone + authenticator app).\n"
+        "- Save backup codes when setting up MFA.\n"
+        "- If someone gets a new phone, they need to transfer their authenticator app BEFORE wiping the old phone."
+    ),
+
+    # ── Event Viewer ──
+    (
+        "How do I use Event Viewer to troubleshoot Windows problems?",
+        "Event Viewer is Windows' built-in log reader. It records everything — crashes, warnings, login attempts, service failures.\n\n"
+        "**Open it:** Search for 'Event Viewer' in Start, or run `eventvwr.msc`.\n\n"
+        "**Where to look:**\n"
+        "- Windows Logs > System: Hardware failures, driver issues, service crashes.\n"
+        "- Windows Logs > Application: App crashes and errors.\n"
+        "- Windows Logs > Security: Login attempts, permission changes (for security audits).\n\n"
+        "**Filter for errors:** Right-click a log > 'Filter Current Log'. Check 'Error' and 'Critical' to hide the noise.\n\n"
+        "**Common useful Event IDs:**\n"
+        "- 41: Unexpected shutdown (power failure or crash).\n"
+        "- 1001: Windows Error Reporting (app crash details).\n"
+        "- 7036: Service started or stopped.\n"
+        "- 4625: Failed login attempt.\n"
+        "- 6008: Unexpected shutdown.\n\n"
+        "**PowerShell alternative:**\n"
+        "```powershell\nGet-EventLog -LogName System -EntryType Error -Newest 20\n```\n\n"
+        "**Tip:** When you see an error you don't understand, copy the Event ID and source, then search 'Event ID <number> <source>' online. "
+        "Microsoft's documentation and community forums usually have the answer."
+    ),
+
+    # ── Windows Defender Firewall — Inbound Rules ──
+    (
+        "How do I block a specific program from accessing the internet on Windows?",
+        "You can create an outbound firewall rule to block it.\n\n"
+        "1. Open Windows Defender Firewall with Advanced Security: Search for it in Start.\n\n"
+        "2. Click 'Outbound Rules' in the left panel > 'New Rule' on the right.\n\n"
+        "3. Select 'Program' > Next.\n\n"
+        "4. Browse to the program's .exe file (example: `C:\\Program Files\\SomeApp\\app.exe`) > Next.\n\n"
+        "5. Select 'Block the connection' > Next.\n\n"
+        "6. Check all three profiles (Domain, Private, Public) > Next.\n\n"
+        "7. Name the rule (e.g., 'Block SomeApp Internet') > Finish.\n\n"
+        "The program will immediately lose internet access. To undo it, find the rule in the outbound list, right-click, and disable or delete it.\n\n"
+        "**PowerShell method:**\n"
+        "```powershell\nNew-NetFirewallRule -DisplayName 'Block SomeApp' -Direction Outbound -Program 'C:\\Program Files\\SomeApp\\app.exe' -Action Block\n```\n\n"
+        "**Note:** Some programs use multiple .exe files. Check the program's install folder for all executables and block each one. "
+        "Also check Task Manager while the program is running to see exactly which process name it uses."
+    ),
+
+    # ── Startup Repair ──
+    (
+        "Windows won't start. I just see a black screen after the logo. What do I do?",
+        "A black screen after the Windows logo means Windows started loading but something failed.\n\n"
+        "1. **Wait 5 minutes:** Sometimes Windows is installing updates and the screen looks frozen. Give it time before forcing anything.\n\n"
+        "2. **Try Ctrl+Alt+Delete:** If the screen is just black, press Ctrl+Alt+Delete. If Task Manager appears, the desktop shell (explorer.exe) crashed. "
+        "In Task Manager: File > Run new task > type `explorer.exe` > OK.\n\n"
+        "3. **Boot into Safe Mode:** Force power off 3 times during boot (hold power button when you see the logo). "
+        "On the 4th try, Windows enters recovery mode. Go to Troubleshoot > Advanced options > Startup Settings > Safe Mode.\n\n"
+        "4. **In Safe Mode, try:**\n"
+        "   - Uninstall the last Windows update: Settings > Windows Update > Update history > Uninstall updates.\n"
+        "   - Roll back a driver: Device Manager > Display adapters > right-click > Properties > Driver tab > Roll Back Driver.\n"
+        "   - System Restore: Search for 'System Restore' and pick a restore point from before the problem.\n\n"
+        "5. **Startup Repair:** From the recovery menu: Troubleshoot > Advanced options > Startup Repair. Let Windows try to fix itself.\n\n"
+        "6. **Command Prompt repair:** From Advanced options > Command Prompt:\n"
+        "```\nbootrec /fixmbr\nbootrec /fixboot\nbootrec /rebuildbcd\n```\n\n"
+        "7. If nothing works, you can reset Windows (Troubleshoot > Reset this PC) while keeping your personal files."
+    ),
+
+    # ── SharePoint ──
+    (
+        "How do I give someone access to a SharePoint site?",
+        "There are a few ways depending on what level of access they need.\n\n"
+        "**Share the entire site:**\n"
+        "1. Go to the SharePoint site.\n"
+        "2. Click the gear icon (top right) > Site permissions.\n"
+        "3. Click 'Invite people' or 'Share site'.\n"
+        "4. Type the person's email. Choose their permission level:\n"
+        "   - Full Control: Can change everything including permissions.\n"
+        "   - Edit (Member): Can add, edit, and delete content.\n"
+        "   - Read (Visitor): Can only view content.\n\n"
+        "**Share a specific document or folder:**\n"
+        "1. Navigate to the document library.\n"
+        "2. Hover over the file > click the three dots > Manage access.\n"
+        "3. Click 'Grant access' or generate a sharing link.\n"
+        "4. Choose: People you specify, people in your org, or anyone with the link.\n\n"
+        "**Using SharePoint groups (best practice):**\n"
+        "Instead of adding individuals, add them to a SharePoint group:\n"
+        "- Site Owners: Full control.\n"
+        "- Site Members: Edit access.\n"
+        "- Site Visitors: Read-only.\n"
+        "This makes it easier to manage when people join or leave.\n\n"
+        "**Troubleshooting:**\n"
+        "- 'Access denied' after sharing: It can take a few minutes for permissions to sync. Have the user clear their browser cache or try an incognito window.\n"
+        "- External sharing: If sharing with someone outside your organization, an admin must enable external sharing in the SharePoint admin center."
+    ),
+
+    # ── Backup Strategy ──
+    (
+        "What is the 3-2-1 backup rule?",
+        "The 3-2-1 backup rule is a best practice for making sure you never lose data:\n\n"
+        "**3** copies of your data: The original plus two backups.\n\n"
+        "**2** different types of storage: For example, an external hard drive AND cloud storage. "
+        "If both backups are on the same type (two external drives in the same room), a single event (fire, flood, theft) can destroy both.\n\n"
+        "**1** copy offsite: At least one backup should be in a different physical location — "
+        "cloud storage (like OneDrive, Google Drive, Backblaze) or an external drive stored at another location.\n\n"
+        "**Practical example for a small business:**\n"
+        "- Copy 1: Original data on the server.\n"
+        "- Copy 2: Daily backup to a NAS (network attached storage) in the same office.\n"
+        "- Copy 3: Nightly backup to cloud storage (Azure Backup, AWS S3, or Backblaze B2).\n\n"
+        "**For personal use:**\n"
+        "- Copy 1: Files on your laptop.\n"
+        "- Copy 2: External hard drive at home (use Time Machine on Mac or File History on Windows).\n"
+        "- Copy 3: Cloud backup (OneDrive, iCloud, or Google Drive).\n\n"
+        "**Test your backups:** A backup you've never tested is not a backup. "
+        "Regularly try restoring a file from each backup to make sure it actually works. "
+        "Many people discover their backups are broken only when they need them most."
+    ),
+
+    # ── Conditional Access ──
+    (
+        "What is Conditional Access in Azure AD and how does it work?",
+        "Conditional Access is a security feature in Azure AD (Entra ID) that controls WHO can access WHAT, from WHERE, and under what CONDITIONS.\n\n"
+        "Think of it as an if-then rule: IF a condition is met, THEN apply an action.\n\n"
+        "**Common policies:**\n\n"
+        "1. **Require MFA for admins:** If the user has a Global Admin role, then require multi-factor authentication every time.\n\n"
+        "2. **Block access from untrusted locations:** If the sign-in comes from outside the company network, then block access (or require MFA).\n\n"
+        "3. **Require compliant devices:** If the device isn't enrolled in Intune and up to date, then block access to company email.\n\n"
+        "4. **Block legacy authentication:** If the app uses old protocols (like POP3 or IMAP), then block the connection. "
+        "These old protocols don't support MFA, so they're a security risk.\n\n"
+        "**How to create a policy:**\n"
+        "1. Azure Portal > Azure Active Directory > Security > Conditional Access.\n"
+        "2. New policy > name it.\n"
+        "3. Assignments: Choose which users or groups it applies to.\n"
+        "4. Cloud apps: Choose which apps it protects (e.g., all apps, or just Exchange Online).\n"
+        "5. Conditions: Set location, device platform, risk level.\n"
+        "6. Grant: Require MFA, require compliant device, or block access.\n\n"
+        "**Start in Report-only mode:** This lets you see who would be affected without actually blocking anyone. "
+        "Monitor for a week, then switch to On."
+    ),
+
+    # ── Google Workspace ──
+    (
+        "How do I migrate email from Gmail to Microsoft 365?",
+        "There are several ways to move email from Gmail (or Google Workspace) to Microsoft 365.\n\n"
+        "**Method 1 — IMAP Migration (simplest for small migrations):**\n"
+        "1. In Gmail, enable IMAP: Gmail Settings > See all settings > Forwarding and POP/IMAP > Enable IMAP.\n"
+        "2. If 2FA is on, generate an App Password: Google Account > Security > App passwords.\n"
+        "3. In M365 Admin Center > Setup > Data migration.\n"
+        "4. Select 'Gmail' as the source.\n"
+        "5. Enter each user's Gmail address and app password.\n"
+        "6. Start the migration. Emails will copy over (this can take hours for large mailboxes).\n\n"
+        "**Method 2 — Google Workspace migration tool (for orgs):**\n"
+        "Use the Microsoft 365 migration tools in Exchange Online admin center. "
+        "This handles email, contacts, and calendar items.\n\n"
+        "**Method 3 — Outlook desktop:**\n"
+        "1. Add both accounts (Gmail and M365) to Outlook.\n"
+        "2. Drag and drop folders from Gmail to M365.\n"
+        "3. Slow but gives you full control over what gets moved.\n\n"
+        "**Important steps after migration:**\n"
+        "- Update your domain's MX records to point to Microsoft 365 (so new email goes to the right place).\n"
+        "- Set up mail forwarding from Gmail during the transition period.\n"
+        "- Tell users the switch date so they know which mailbox to check.\n"
+        "- Update SPF and DKIM records for the new email system."
+    ),
+
+    # ── Shortcuts / Productivity ──
+    (
+        "What are the most useful Windows keyboard shortcuts for IT work?",
+        "Here are the shortcuts every IT person should know:\n\n"
+        "**System shortcuts:**\n"
+        "- Win + R: Open Run dialog (quick access to tools like `cmd`, `regedit`, `services.msc`).\n"
+        "- Win + X: Power User menu (Device Manager, Disk Management, Terminal, etc.).\n"
+        "- Win + I: Open Settings.\n"
+        "- Win + L: Lock your screen (always do this when walking away).\n"
+        "- Ctrl + Shift + Esc: Open Task Manager directly.\n"
+        "- Win + Shift + S: Screenshot tool (snip any area of the screen).\n\n"
+        "**Command Prompt / Terminal:**\n"
+        "- Win + R > type `cmd` > Ctrl+Shift+Enter: Open Command Prompt as Admin.\n"
+        "- Tab: Auto-complete file and folder names.\n"
+        "- Up arrow: Repeat last command.\n"
+        "- Ctrl + C: Cancel a running command.\n\n"
+        "**Remote Desktop:**\n"
+        "- Ctrl + Alt + End: Send Ctrl+Alt+Delete to the remote machine.\n"
+        "- Ctrl + Alt + Break: Switch between fullscreen and windowed mode.\n\n"
+        "**File Explorer:**\n"
+        "- Win + E: Open File Explorer.\n"
+        "- Alt + D: Jump to the address bar (type a path or UNC path like \\\\server\\share).\n"
+        "- F2: Rename selected file.\n"
+        "- Shift + Delete: Permanently delete (skip Recycle Bin).\n\n"
+        "**Virtual Desktops:**\n"
+        "- Win + Ctrl + D: Create a new virtual desktop.\n"
+        "- Win + Ctrl + Left/Right: Switch between virtual desktops.\n"
+        "Great for separating work tasks — one desktop for tickets, one for remote sessions."
+    ),
+
+    # ── IPv4 vs IPv6 ──
+    (
+        "What is the difference between IPv4 and IPv6?",
+        "IPv4 and IPv6 are both versions of the Internet Protocol used to identify devices on a network.\n\n"
+        "**IPv4:**\n"
+        "- Format: 4 numbers separated by dots (e.g., 192.168.1.100).\n"
+        "- Each number is 0-255.\n"
+        "- Total addresses: About 4.3 billion (we've run out).\n"
+        "- Example: `10.0.0.1`, `172.16.0.1`, `8.8.8.8`\n\n"
+        "**IPv6:**\n"
+        "- Format: 8 groups of hexadecimal numbers separated by colons (e.g., 2001:0db8:85a3:0000:0000:8a2e:0370:7334).\n"
+        "- Total addresses: 340 undecillion (essentially unlimited).\n"
+        "- Example: `2001:db8::1`, `fe80::1`\n\n"
+        "**Why IPv6 exists:**\n"
+        "We ran out of IPv4 addresses. The internet has more devices than IPv4 can handle. "
+        "IPv6 was created to solve this with a much larger address space.\n\n"
+        "**Do you need to worry about it?**\n"
+        "- Most home and office networks still run IPv4 internally.\n"
+        "- Your ISP probably supports both (dual stack).\n"
+        "- If something isn't working and you see an IPv6 address, try disabling IPv6 on the adapter as a test: "
+        "Network adapter Properties > uncheck 'Internet Protocol Version 6 (TCP/IPv6)'.\n"
+        "- For internal networks, IPv4 with NAT works fine. IPv6 becomes important for large-scale public-facing services.\n\n"
+        "**Quick troubleshooting:**\n"
+        "If a site works on one device but not another, check if one is using IPv4 and the other IPv6. "
+        "DNS can return different addresses for each protocol."
+    ),
+
+    # ── SSD vs HDD ──
+    (
+        "Should I upgrade from an HDD to an SSD? Is it worth it?",
+        "Yes, upgrading from an HDD to an SSD is the single biggest performance improvement you can make on an older computer.\n\n"
+        "**Speed difference:**\n"
+        "- HDD: ~100 MB/s read/write. Mechanical parts — a spinning disk with a moving arm.\n"
+        "- SATA SSD: ~550 MB/s. No moving parts. 5x faster.\n"
+        "- NVMe SSD: ~3,500 MB/s. Uses a different interface. 35x faster than HDD.\n\n"
+        "**What you'll notice:**\n"
+        "- Windows boot time: 2-3 minutes on HDD → 10-15 seconds on SSD.\n"
+        "- Programs open instantly instead of bouncing in the taskbar.\n"
+        "- File copies are much faster.\n"
+        "- The computer feels responsive even with multiple apps open.\n\n"
+        "**How to upgrade:**\n"
+        "1. Buy an SSD that fits your computer (2.5-inch SATA for most laptops, M.2 NVMe for newer ones).\n"
+        "2. Clone your existing drive: Use free software like Macrium Reflect or Samsung Data Migration (if you bought a Samsung SSD). "
+        "This copies everything — Windows, programs, files — to the new SSD.\n"
+        "3. Swap the drives: Open the laptop, remove the HDD, insert the SSD.\n"
+        "4. Boot up. Everything should be exactly the same but faster.\n\n"
+        "**Tip:** 256 GB is the minimum for Windows + basic apps. 512 GB gives comfortable room. "
+        "If you need lots of storage, keep the old HDD as a secondary drive for files and put the OS on the SSD."
+    ),
+
+    # ── Logs / Syslog ──
+    (
+        "What is syslog and how do I set up centralized logging on Linux?",
+        "Syslog is the standard logging system on Linux. Every service, kernel event, and authentication attempt writes to syslog.\n\n"
+        "**Default log locations:**\n"
+        "- `/var/log/syslog` or `/var/log/messages`: General system log.\n"
+        "- `/var/log/auth.log`: Login attempts, sudo usage, SSH connections.\n"
+        "- `/var/log/kern.log`: Kernel messages (hardware issues, driver errors).\n"
+        "- `/var/log/nginx/` or `/var/log/apache2/`: Web server logs.\n\n"
+        "**Reading logs:**\n"
+        "```bash\n# View the last 50 lines\ntail -50 /var/log/syslog\n\n"
+        "# Follow logs in real-time (like a live feed)\ntail -f /var/log/syslog\n\n"
+        "# Search for a keyword\ngrep 'error' /var/log/syslog\n\n"
+        "# View logs from today using journalctl (systemd)\njournalctl --since today\n\n"
+        "# Logs for a specific service\njournalctl -u nginx.service\n```\n\n"
+        "**Centralized logging (multiple servers):**\n"
+        "Instead of checking logs on each server individually, forward them all to one central server.\n\n"
+        "1. On the central log server, configure rsyslog to accept remote logs:\n"
+        "   Edit `/etc/rsyslog.conf`, uncomment the UDP or TCP lines:\n"
+        "   ```\n   module(load=\"imtcp\")\n   input(type=\"imtcp\" port=\"514\")\n   ```\n"
+        "   Restart rsyslog: `sudo systemctl restart rsyslog`.\n\n"
+        "2. On each client server, add a line to `/etc/rsyslog.conf`:\n"
+        "   ```\n   *.* @@logserver.example.com:514\n   ```\n"
+        "   (`@@` = TCP, `@` = UDP). Restart rsyslog.\n\n"
+        "For production environments, consider tools like the ELK stack (Elasticsearch, Logstash, Kibana) or Graylog for searching and visualizing logs."
+    ),
+
+    # ── Phishing ──
+    (
+        "How do I identify a phishing email?",
+        "Phishing emails try to trick you into clicking a link, opening an attachment, or sharing credentials. Here's how to spot them:\n\n"
+        "**Red flags:**\n"
+        "1. **Sender address looks off:** The display name says 'Microsoft Support' but the email is from `support@micr0s0ft-help.com`. "
+        "Always check the actual email address, not just the display name.\n\n"
+        "2. **Urgency or threats:** 'Your account will be closed in 24 hours!' or 'Unauthorized login detected — act now!' "
+        "Legitimate companies don't pressure you like this.\n\n"
+        "3. **Generic greeting:** 'Dear Customer' instead of your name. Real companies usually know your name.\n\n"
+        "4. **Suspicious links:** Hover over any link (don't click) and check the URL. "
+        "A link that says 'microsoft.com' but actually goes to 'microsoft.phishing-site.com' is fake. "
+        "The domain that matters is right before the .com.\n\n"
+        "5. **Attachments you didn't expect:** Especially .zip, .exe, .docm (macro-enabled Word docs), or .html files.\n\n"
+        "6. **Bad grammar and spelling:** Many phishing emails have obvious errors that legitimate companies wouldn't make.\n\n"
+        "**What to do if you spot one:**\n"
+        "- Don't click any links or open attachments.\n"
+        "- Report it: In Outlook, click 'Report Message' > Phishing. In Gmail, click the three dots > Report phishing.\n"
+        "- Forward it to your IT security team.\n"
+        "- If you already clicked a link or entered credentials, change your password immediately and notify IT.\n\n"
+        "**For IT admins:** Set up anti-phishing policies in Microsoft 365 Defender or Google Workspace Security."
+    ),
+
+    # ── Wake on LAN ──
+    (
+        "How do I remotely turn on a computer using Wake-on-LAN?",
+        "Wake-on-LAN (WoL) lets you power on a computer over the network by sending a special packet (magic packet) to its network card.\n\n"
+        "**Setup — on the target computer:**\n\n"
+        "1. Enable in BIOS: Restart the computer > enter BIOS (usually F2, Del, or F12 during boot). "
+        "Look for 'Wake on LAN', 'Power On By PCIE/PCI', or similar. Enable it. Save and exit.\n\n"
+        "2. Enable in Windows: Device Manager > Network adapters > right-click your Ethernet adapter > Properties.\n"
+        "   - Power Management tab: Check 'Allow this device to wake the computer'.\n"
+        "   - Advanced tab: Find 'Wake on Magic Packet' and set it to Enabled.\n\n"
+        "3. Note the MAC address: Open Command Prompt > `ipconfig /all`. Find the Physical Address under your Ethernet adapter "
+        "(looks like `A4-1F-72-3C-8D-91`).\n\n"
+        "**Sending the magic packet (from another computer):**\n\n"
+        "**PowerShell:**\n"
+        "```powershell\n$mac = 'A41F723C8D91'  # Target MAC without dashes\n"
+        "$magicPacket = [byte[]](,0xFF * 6) + [byte[]]($mac -replace '..', '0x$&,' -split ',' | Where-Object {$_} | ForEach-Object {[byte]$_}) * 16\n"
+        "$udpClient = New-Object System.Net.Sockets.UdpClient\n"
+        "$udpClient.Connect([System.Net.IPAddress]::Broadcast, 9)\n"
+        "$udpClient.Send($magicPacket, $magicPacket.Length) | Out-Null\n```\n\n"
+        "**Important notes:**\n"
+        "- WoL only works over Ethernet (wired), not Wi-Fi.\n"
+        "- The computer must be shut down properly (not a hard power off).\n"
+        "- WoL works on the local network. For remote WoL over the internet, you need to set up port forwarding on your router (forward UDP port 9 to the broadcast address)."
+    ),
+
+    # ── System Restore ──
+    (
+        "How do I use System Restore to fix Windows?",
+        "System Restore rolls your computer back to an earlier point in time. It undoes system changes (driver installs, updates, registry changes) "
+        "without affecting your personal files.\n\n"
+        "**How to use it:**\n"
+        "1. Search for 'Create a restore point' in Start.\n"
+        "2. In the System Properties window, click 'System Restore'.\n"
+        "3. Click Next. Choose a restore point from the list — pick one from before your problem started.\n"
+        "4. Click 'Scan for affected programs' to see what will be removed.\n"
+        "5. Click Next > Finish. The computer will restart and restore.\n\n"
+        "**If Windows won't boot:**\n"
+        "Force power off 3 times during boot to enter recovery. Troubleshoot > Advanced options > System Restore.\n\n"
+        "**Turn on System Restore (if it's off):**\n"
+        "1. Search for 'Create a restore point' > select your C: drive > click 'Configure'.\n"
+        "2. Select 'Turn on system protection'. Set the disk space to 5-10%.\n"
+        "3. Click OK.\n\n"
+        "**Create a manual restore point before making changes:**\n"
+        "Same window > click 'Create' > name it (e.g., 'Before driver update') > click Create.\n\n"
+        "**What System Restore does NOT restore:**\n"
+        "- Personal files (documents, photos, music) — these are not affected.\n"
+        "- Passwords — if you changed your password after the restore point, the old password won't come back.\n"
+        "- Malware — System Restore sometimes restores the malware too. Run a full scan after restoring."
+    ),
+
+    # ── Group Policy — Basic ──
+    (
+        "How do I check which Group Policies are applied to a computer?",
+        "Use `gpresult` to see all policies applied to a computer and the logged-in user.\n\n"
+        "**Quick summary:**\n"
+        "```\ngpresult /r\n```\n"
+        "This shows: applied GPOs, the OU the computer is in, security groups, and whether any policies were denied.\n\n"
+        "**Detailed HTML report (easier to read):**\n"
+        "```\ngpresult /h C:\\temp\\gpreport.html\n```\n"
+        "Open the HTML file in a browser. It shows every setting from every GPO in a searchable format.\n\n"
+        "**For a specific user (must run as admin):**\n"
+        "```\ngpresult /r /user DOMAIN\\username\n```\n\n"
+        "**Force a Group Policy update:**\n"
+        "```\ngpupdate /force\n```\n"
+        "This pulls the latest policies from the domain controller immediately instead of waiting for the normal refresh (every 90 minutes).\n\n"
+        "**Common troubleshooting:**\n"
+        "- Policy not applying: Check the GPO's scope — is the computer or user in the right OU? "
+        "Is the GPO linked to that OU? Are there any WMI filters blocking it?\n"
+        "- Conflicting policies: Multiple GPOs can set the same setting. The last one applied wins. "
+        "The `gpresult /h` report shows which GPO won for each setting.\n"
+        "- Security filtering: Check if the GPO is filtered to a specific security group that the user or computer isn't in."
+    ),
+
+    # ── Clipboard History ──
+    (
+        "Is there a way to see my clipboard history in Windows? I copied something earlier and need it back.",
+        "Yes! Windows 10 and 11 have a built-in clipboard history feature.\n\n"
+        "**Turn it on:**\n"
+        "Settings > System > Clipboard > turn on 'Clipboard history'.\n\n"
+        "**Use it:**\n"
+        "Press Win + V instead of Ctrl + V. A popup shows your last 25+ copied items. Click any item to paste it.\n\n"
+        "**What it stores:**\n"
+        "- Text, HTML, and images under 4 MB.\n"
+        "- It does NOT store files or large images.\n"
+        "- History is cleared when you restart your computer (unless you pin items).\n\n"
+        "**Pin important items:**\n"
+        "In the clipboard history panel (Win + V), click the pin icon on any item. Pinned items stay even after restart.\n\n"
+        "**Sync across devices:**\n"
+        "Settings > System > Clipboard > turn on 'Sync across your devices'. "
+        "Copy on your desktop, paste on your laptop (both must be signed into the same Microsoft account).\n\n"
+        "**Clear clipboard history:**\n"
+        "Settings > System > Clipboard > 'Clear clipboard data'. Or in the Win + V panel, click 'Clear all'.\n\n"
+        "**Security note:** If you copy passwords, they stay in clipboard history. "
+        "Use a password manager that auto-clears the clipboard after pasting, or manually clear your clipboard after pasting sensitive data."
     ),
 ]
 
