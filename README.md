@@ -13,7 +13,7 @@ and handwritten examples.
 
 ## Download and run locally
 
-You need a Mac with Apple Silicon (M1/M2/M3/M4) and Python 3.10+.
+You need a Mac with Apple Silicon (M Series) and Python 3.10+.
 
 ### Step 1: Clone the repo
 
