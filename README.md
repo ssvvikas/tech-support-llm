@@ -37,11 +37,11 @@ The first run downloads the base model (~2 GB). LoRA adapters are saved to `adap
 ## Example output
 
 ```
-Wi-Fi connection failures have several common causes. Let me walk you through
+WiFi connection failures have several common causes. Let me walk you through
 the troubleshooting steps:
 
-1. Check if Wi-Fi is enabled — look for the physical switch or Fn key on your
-   laptop, and check the Wi-Fi icon in the system tray.
+1. Check if Wi-Fi is enabled, look for the physical switch or Fn key on your
+   laptop, and check the WiFi icon in the system tray.
 2. Forget and reconnect to the network: Settings → Network & Internet → Wi-Fi
    → Manage known networks → select the network → Forget, then reconnect.
 3. Run the Windows network troubleshooter: Settings → Network & Internet →
@@ -52,19 +52,19 @@ the troubleshooting steps:
 
 ## What's in the training data
 
-All 1,002 examples are hand-written Q&A pairs in a clear, step-by-step troubleshooting style. Topics include:
+All 1,002 examples are hand written Q&A pairs in a clear, step-by-step troubleshooting style. Topics include:
 
-- **Networking** — DNS, DHCP, VPN, VLANs, TCP/UDP, NAT, firewall rules, Wi-Fi troubleshooting, load balancers, SD-WAN, MPLS
-- **Windows administration** — Active Directory, Group Policy, BSOD diagnosis, WSUS, BitLocker, RDP, PowerShell scripting, Windows Server hardening
-- **Linux administration** — SSH key auth, disk management, file permissions, server hardening, iptables, systemd services
-- **Cloud and DevOps** — Azure, AWS, Kubernetes, Docker, Terraform, CI/CD pipelines, IaC, containerization
-- **Security** — Zero Trust, SIEM, EDR, MFA, ransomware response, phishing prevention, SSL/TLS certificates, WAF
-- **Microsoft 365** — Exchange/Outlook, Teams, SharePoint, Conditional Access, shared mailboxes, license management
-- **Virtualization** — VMware vSphere, Hyper-V, Type 1 vs Type 2 hypervisors, VM troubleshooting
-- **Helpdesk and ITSM** — Ticket prioritization, ITIL processes, onboarding/offboarding, documentation, escalation procedures
-- **Monitoring** — Prometheus/Grafana, ELK Stack, Zabbix, SNMP, Windows Performance Monitor, centralized logging
-- **Hardware** — RAID levels, NAS setup, printer troubleshooting, laptop repair, data recovery, asset management
-- **Backup and DR** — 3-2-1 rule, full/incremental/differential backups, disaster recovery planning, hot/warm/cold sites
+- **Networking** : DNS, DHCP, VPN, VLANs, TCP/UDP, NAT, firewall rules, Wi-Fi troubleshooting, load balancers, SD-WAN, MPLS
+- **Windows administration** :Active Directory, Group Policy, BSOD diagnosis, WSUS, BitLocker, RDP, PowerShell scripting, Windows Server hardening
+- **Linux administration** : SSH key auth, disk management, file permissions, server hardening, iptables, systemd services
+- **Cloud and DevOps** :Azure, AWS, Kubernetes, Docker, Terraform, CI/CD pipelines, IaC, containerization
+- **Security** : Zero Trust, SIEM, EDR, MFA, ransomware response, phishing prevention, SSL/TLS certificates, WAF
+- **Microsoft 365** : Exchange/Outlook, Teams, SharePoint, Conditional Access, shared mailboxes, license management
+- **Virtualization** : VMware vSphere, Hyper-V, Type 1 vs Type 2 hypervisors, VM troubleshooting
+- **Helpdesk and ITSM** : Ticket prioritization, ITIL processes, onboarding/offboarding, documentation, escalation procedures
+- **Monitoring** : Prometheus/Grafana, ELK Stack, Zabbix, SNMP, Windows Performance Monitor, centralized logging
+- **Hardware** : RAID levels, NAS setup, printer troubleshooting, laptop repair, data recovery, asset management
+- **Backup and DR** : 3-2-1 rule, full/incremental/differential backups, disaster recovery planning, hot/warm/cold sites
 
 ## Training configuration
 
